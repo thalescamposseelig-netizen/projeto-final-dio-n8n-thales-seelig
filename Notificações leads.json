@@ -1,0 +1,222 @@
+{
+  "name": "Notificações leads",
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8d30a5f4-9e7a-4e51-8f36-ec680ef98876",
+              "name": "Nome",
+              "value": "={{ $json.Nome }}",
+              "type": "string"
+            },
+            {
+              "id": "ff77f4ff-f8ae-4782-9f20-5419e7f8c274",
+              "name": "Telefone",
+              "value": "={{ $json.Telefone }}",
+              "type": "number"
+            },
+            {
+              "id": "5230fc2e-986d-47b7-bfce-5e12b09885dd",
+              "name": "E-mail",
+              "value": "={{ $json['E-mail'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        240,
+        0
+      ],
+      "id": "1f7d9326-1b0a-40c4-9948-0c35717da22c",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1P2Y5acCZkYVjNbDmDwwXK5QBbQzwSVzwRExXHRklJDo",
+          "mode": "list",
+          "cachedResultName": "LEADS PROJETO DIO",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P2Y5acCZkYVjNbDmDwwXK5QBbQzwSVzwRExXHRklJDo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Página1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P2Y5acCZkYVjNbDmDwwXK5QBbQzwSVzwRExXHRklJDo/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Nome": "={{ $json.Nome }}",
+            "Telefone": "={{ $json.Telefone }}",
+            "E-mail": "={{ $json['E-mail'] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Nome",
+              "displayName": "Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Telefone",
+              "displayName": "Telefone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "E-mail",
+              "displayName": "E-mail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        464,
+        0
+      ],
+      "id": "f4bfff5b-f942-4943-ac7e-16fd35f7bfe8",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "tC6c9658khGIuzDQ",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "thalescamposseelig@gmail.com",
+        "subject": "RECEBIMENTO DE LEADS",
+        "emailType": "text",
+        "message": "Um novo lead foi adicionado!",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        688,
+        0
+      ],
+      "id": "cf31873a-7ca1-4cdc-bd3d-47c6a4b4a85d",
+      "name": "Send a message",
+      "webhookId": "1bd46a63-e2f0-46bd-852c-0e97fc3a3371",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qQmMfTzWDX0GqkhY",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formTitle": "Leads projeto DIO",
+        "formDescription": "Fluxo do projeto final DIO",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Nome"
+            },
+            {
+              "fieldLabel": "Telefone",
+              "fieldType": "number"
+            },
+            {
+              "fieldLabel": "E-mail",
+              "fieldType": "email"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        0,
+        0
+      ],
+      "id": "c2324071-d762-40b0-b165-07a235965640",
+      "name": "On form submission",
+      "webhookId": "0cc2a393-9ffc-4481-966b-35ec6beeb69f"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "timezone": "America/Sao_Paulo",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "41171be7-7109-4524-aed4-83945dcbae63",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "87cf42ec6fac0833771121e6c32ddf8d818089e58aea90a18f4eb48e8d3b62c5"
+  },
+  "nodeGroups": [],
+  "id": "CpgFOYQQ6yzLa8Nt",
+  "tags": []
+}
